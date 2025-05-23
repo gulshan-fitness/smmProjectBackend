@@ -35,7 +35,12 @@ app.use(express.static("public"))
 require('dotenv').config()
 
 
-app.use(cors())
+app.use(cors(
+    {
+  origin: 'https://smmprojectfrontendre.onrender.com',
+  credentials: true
+}
+))
 
 
 
