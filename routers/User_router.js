@@ -2,6 +2,7 @@
 
 
 
+const authenticateToken = require("../Authentication")
 const user_controller = require("../Controlers/User_controller")
 
 
@@ -64,11 +65,13 @@ User_router.post(
     }
 
 )
+
+
+
 User_router.post(
     "/loginWithOtp",
 
 (req,res)=>{
-    
     
 
         const result = new user_controller().loginWithOtp(req.body)
@@ -91,6 +94,35 @@ User_router.post(
 
 )
 
+
+
+User_router.get(
+    "/userverify/:id",
+    authenticateToken,
+
+(req,res)=>{
+    
+    
+
+        const result = new user_controller().userverify(req.params.id)
+
+        result.then(
+            (succes)=>{
+                res.send( succes)
+            }
+        )
+        
+        .catch(
+            (error)=>{
+                res.send( error) 
+            }
+        )
+
+
+
+    }
+
+)
 
 
 module.exports= User_router 
