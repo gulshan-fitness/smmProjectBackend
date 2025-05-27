@@ -24,7 +24,9 @@ const adminSchema = new Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    role:{  type: String,
+        default:"subadmin"}
 });
 
 const AdminModel = mongoose.model('admin', adminSchema);
