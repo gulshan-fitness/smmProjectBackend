@@ -53,9 +53,12 @@ class user_controller {
                               await user.save()
                               
            const token = jwt.sign({ user: user }, process.env.TOKEN_KEY, { expiresIn: '10y' });
-                                    resolve(
+              
+                         const{password,...userdata}=user.toObject()                      
+           
+           resolve(
 
-                                        { msg: "User login succesfully", status: 1,user:{...user.toJSON(),password:null},token }
+                                        { msg: "User login succesfully", status: 1,user:userdata,token }
 
                                        )    
                             
@@ -116,12 +119,14 @@ class user_controller {
             
             const token = jwt.sign({ user: user?user:phone }, process.env.TOKEN_KEY, { expiresIn: '10y' });
 
-         
+const userdefine=user?user:phone
+
+         const{password,...userdata}=userdefine.toObject() 
             resolve(
         
                 
         
-               {msg:" login succesfull" , status: 1, user:user?{...user.toJSON(),password:null}:{...phone.toJSON(),password:null},token
+               {msg:" login succesfull" , status: 1, user:userdata,token
                 
                
             }
@@ -156,6 +161,7 @@ class user_controller {
                 catch (error) {
 
                       
+                  
                     
                     
                    
@@ -196,9 +202,11 @@ class user_controller {
                         if(otp_verify){
 
                             const token = jwt.sign({ user: user?user:phone }, process.env.TOKEN_KEY, { expiresIn: '10y' });
-                         
+
+                         const{password,...userdata}=user.toObject()
+
                             resolve(
-                                {msg:" login succesfull" , status: 1, user:{...user.toJSON(),password:null},token    
+                                {msg:" login succesfull" , status: 1, user:userdata,token    
                              }
                          
                              )
@@ -248,7 +256,76 @@ class user_controller {
 
 
   
-  
+  userverify(id){
+    
+   
+            return new Promise(
+                async(resolve, reject) => {
+                try {
+        
+        
+        
+        
+            const existuser= await user_model.findOne({_id:id})
+           
+
+            
+
+        
+            if(existuser){
+            
+        
+            
+          
+           
+      
+
+            
+            const token = jwt.sign({ user: existuser }, process.env.TOKEN_KEY, { expiresIn: '10y' });
+
+const{password,...userdata}=existuser.toObject()
+         
+            resolve(
+        
+                
+        
+               {msg:" verify done" , status: 1, user:userdata,token
+                
+               
+            }
+        
+            )
+        
+        }
+
+
+        else     reject(
+                        
+                        { msg: "verification Failed", status: 0 }
+                       )
+
+        }
+        
+             
+                 
+                    
+                
+                catch (error) {
+
+                      
+                    
+                    
+                   
+                    reject(
+                        
+                        { msg: "internal error", status: 0 }
+                       )
+                }
+            
+                
+            })
+        
+            }
 
 
 
