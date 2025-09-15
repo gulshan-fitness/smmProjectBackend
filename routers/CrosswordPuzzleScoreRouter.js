@@ -45,7 +45,7 @@ res.send(succes)
 
 CrosswordpuzzleScoreRouter.get(
 
-    "/read/?:id",
+    "/read/:id?",
 
     (req,res)=>{
 

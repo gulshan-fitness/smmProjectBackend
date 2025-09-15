@@ -37,7 +37,8 @@ return new Promise(
                             name:data.name,
                             email:data.email,
                             contact: data.contact,
-                            password:encryptedpassword
+                            password:encryptedpassword,
+                            role:data.role
                     
                         }
                     )
@@ -49,11 +50,12 @@ return new Promise(
                       .then(
                         async(succes) => {
                        
-                            const token = jwt.sign({ admin: admin }, process.env.TOKEN_KEY, { expiresIn: '10y' });
+                            const token = jwt.sign({ admin: admin ,role: admin?.role}, process.env.TOKEN_KEY, { expiresIn: '1h' });
+                             const { password, ...adminData } = admin.toObject()
 
                             resolve(
                                 { msg: "admin sign_up succesfully", status: 1 , 
-                                    admin:{...admin.toJSON() , password:null},
+                                    admin:adminData,
                                     token
                                 }
                                )
@@ -105,6 +107,8 @@ return new Promise(
 }
 
 
+
+
  login(data){
     
    
@@ -127,13 +131,14 @@ if( data.email && data.password)
    
 if(decrypted_password == data.password){
 
-    const token = jwt.sign({ admin: admin }, process.env.TOKEN_KEY, { expiresIn: '10y' });
+    const token = jwt.sign({ admin: admin ,role: admin?.role}, process.env.TOKEN_KEY, { expiresIn: '1h' });
+    const { password, ...adminData } = admin.toObject()
     resolve(
 
-        
+           
        {msg:" login succesfull" , status: 1, 
         
-        admin:{...admin.toJSON(),password:null},
+        admin:adminData,
         token
     }
 
@@ -171,6 +176,7 @@ reject(
             
         } 
         catch (error) {
+           console.log(error);
            
             reject(
                 
@@ -184,12 +190,44 @@ reject(
     }
 
    
+    
+        AdminVerify(id){
+   
 
-
-       
+return new Promise(
+    async(resolve, reject) => {
         
-
+    try {
        
+            const exits_admin = await AdminModel.findOne({_id:id})
+
+
+            if(exits_admin){
+                 const token = jwt.sign({ admin: exits_admin ,role: exits_admin?.role}, process.env.TOKEN_KEY, { expiresIn: '1h' });
+                const{password,...admindata}=exits_admin.toObject()
+                reject( { msg: "verify Done", status: 1, admin:admindata,token })  
+            }
+
+   else  reject(
+            
+            { msg: "this User is not Exist", status: 0 }
+            
+           )
+        
+     
+        
+    } 
+    catch (error) {
+       
+        reject(
+            
+            { msg: "internal error", status: 0 }
+           )
+    }
+
+    
+})
+}
 
 
 }

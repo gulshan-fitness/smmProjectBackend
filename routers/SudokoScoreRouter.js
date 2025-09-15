@@ -46,7 +46,7 @@ res.send(succes)
 
 SudokoScoreRouter.get(
 
-    "/read/?:id",
+    "/read/:id?",
 
     (req,res)=>{
 

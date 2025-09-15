@@ -1,3 +1,4 @@
+const authenticateToken = require("../Authentication")
 const AdminController = require("../Controlers/AdminController")
 
 
@@ -59,6 +60,33 @@ AdminRouter.post(
         }
 
 )
+
+AdminRouter.get(
+    "/AdminVerify/:id",
+    authenticateToken,
+
+    (req,res)=>{
+    
+       
+    
+            const result = new AdminController().AdminVerify(req.params.id)
+            result.then(
+                (succes)=>{
+                    res.send( succes)
+                }
+            )
+            
+            .catch(
+                (error)=>{
+                    res.send( error) 
+                }
+            )
+    
+        }
+
+)
+
+
 
 
 

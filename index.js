@@ -14,6 +14,7 @@ const CrosswordpuzzleRouter = require("./routers/CrosswordPuzzleRouter");
 const CrosswordpuzzleScoreRouter = require("./routers/CrosswordPuzzleScoreRouter");
 const SudokoRouter = require("./routers/SudokoRouter");
 const SudokoScoreRouter = require("./routers/SudokoScoreRouter");
+const RiddlesRouter = require("./routers/RiddlesRouter");
 
 
 
@@ -35,7 +36,14 @@ app.use(express.static("public"))
 require('dotenv').config()
 
 
+// app.use(cors({
+//   origin: 'https://smmprojectfrontendre.onrender.com',
+//   credentials: true
+// }))
+
+
 app.use(cors())
+
 
 
 
@@ -60,7 +68,7 @@ app.use("/crosswordpuzzle",CrosswordpuzzleRouter)
 app.use("/crosswordpuzzlescore",CrosswordpuzzleScoreRouter)
 app.use("/sudoko",SudokoRouter)
 app.use("/sudokoscore",SudokoScoreRouter)
-
+app.use("/riddles",RiddlesRouter)
 
 
 
