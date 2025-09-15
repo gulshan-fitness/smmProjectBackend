@@ -125,4 +125,8 @@ User_router.get(
 )
 
 
+<<<<<<< HEAD
 module.exports= User_router 
+=======
+module.exports= User_router 
+>>>>>>> d767b3f5eb3cbf4621e94793660e271c09cb7cc8
