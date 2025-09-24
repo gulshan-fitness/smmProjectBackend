@@ -36,22 +36,20 @@ app.use(express.static("public"))
 require('dotenv').config()
 
 
-<<<<<<< HEAD
-// app.use(cors({
+
+// app.use(cors(
+//     {
 //   origin: 'https://smmprojectfrontendre.onrender.com',
 //   credentials: true
-// }))
+// }
+// ))
+
 
 
 app.use(cors())
-=======
-app.use(cors(
-    {
-  origin: 'https://smmprojectfrontendre.onrender.com',
-  credentials: true
-}
-))
->>>>>>> d767b3f5eb3cbf4621e94793660e271c09cb7cc8
+
+
+
 
 
 
@@ -97,7 +95,7 @@ mongoose.connect(
         server.listen( process.env.PORT,()=>{
 
             initSocket(server)
-            console.log("server started")
+            console.log("server started" )
             
 
         })
