@@ -27,6 +27,8 @@ const adminSchema = new Schema({
     },
     role:{  type: String,
         default:"subadmin"}
+},{
+    timestamps:true
 });
 
 const AdminModel = mongoose.model('admin', adminSchema);
