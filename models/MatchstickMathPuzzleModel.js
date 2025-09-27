@@ -5,7 +5,7 @@ const MatchstickMathPuzzleSchema = new mongoose.Schema(
   game: {
     type: [
       {
-        id: { type: String, enum: ['number', 'operator',"equals"], required: true },
+        id: { type: String, enum: ['number','operator',"equals","result"], required: true },
 
         value: { type: String, required: true },
         
@@ -44,7 +44,7 @@ const MatchstickMathPuzzleSchema = new mongoose.Schema(
   result: {
     type: [
       {
-        id: { type: String, enum: ['number', 'operator',"equals"], required: true },
+        id: { type: String, enum: ['number', 'operator',"equals","result"], required: true },
       
         value: { type: String, required: true },
         matchsticks: [

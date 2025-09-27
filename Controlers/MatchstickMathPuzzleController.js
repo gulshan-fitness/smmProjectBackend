@@ -39,6 +39,7 @@ class MatchstickMathPuzzleController {
 
         
       } catch (error) {
+          console.log(error);
           
         
         reject({ msg: "internel error", status: 0 });
