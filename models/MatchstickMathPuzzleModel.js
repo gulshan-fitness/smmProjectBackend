@@ -40,6 +40,24 @@ const MatchstickMathPuzzleSchema = new mongoose.Schema(
   },
 
 
+  submitedAnswer: {
+      type: [
+        {
+          id: { type: String, enum: ["number","operator","equals", "result"], required: true },
+
+          value: { type: String, required: true },
+
+          matchsticks: [
+            {
+              id: { type: String, required: true },
+              status: { type: Boolean, default: true },
+            },
+          ],
+
+        },
+      ],
+      required: false,
+    },
 
   result: {
     type: [
@@ -55,6 +73,9 @@ const MatchstickMathPuzzleSchema = new mongoose.Schema(
         ]
       }
     ],
+
+
+  
     required: true
   }
 }, 

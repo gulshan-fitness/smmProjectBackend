@@ -65,6 +65,35 @@ res.send(succes)
 
     }
 )
+
+
+MatchstickMathPuzzleRouter.post(
+
+    "/resultVerify/:id",
+
+    (req,res)=>{
+
+
+        const result= new MatchstickMathPuzzleController().resultVerify(req.params.id??null,req.body)
+
+result.then(
+    (succes)=>{
+
+res.send(succes)
+    }
+)
+.catch(
+    (error)=>{
+        res.send(error)
+
+    }
+)
+
+    }
+)
+
+
+
 MatchstickMathPuzzleRouter.delete(
 
     "/delete/:id",
