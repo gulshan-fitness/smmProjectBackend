@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+
+
 const SudokuScoreSchema = new mongoose.Schema({
   user_id: {
     type: mongoose.Schema.Types.ObjectId,

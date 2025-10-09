@@ -16,6 +16,8 @@ const SudokoRouter = require("./routers/SudokoRouter");
 const SudokoScoreRouter = require("./routers/SudokoScoreRouter");
 const RiddlesRouter = require("./routers/RiddlesRouter");
 const MatchstickMathPuzzleRouter = require("./routers/MatchstickMathPuzzleRouter");
+const RiddleScoreRouter = require("./routers/RiddleScoreRouter");
+const MatchistickScoreScoreRouter = require("./routers/MatchistickPuzzleScoreRouters");
 
 
 
@@ -78,6 +80,8 @@ app.use("/sudoko",SudokoRouter)
 app.use("/sudokoscore",SudokoScoreRouter)
 app.use("/riddles",RiddlesRouter)
 app.use("/matchstickpuzzle",MatchstickMathPuzzleRouter)
+app.use("/riddlescore",RiddleScoreRouter)
+app.use("/matchistickscore",MatchistickScoreScoreRouter)
 
 
 
