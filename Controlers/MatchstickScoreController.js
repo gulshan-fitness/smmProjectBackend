@@ -71,8 +71,8 @@ class MatchistickScoreController {
       try {
         
         if(id){
-              const MatchistickScore = await MatchistickScoreModel.findOne({
-          _id: id,
+              const MatchistickScore = await MatchistickScoreModel.find({
+          user_id: id,
         
         });
 
