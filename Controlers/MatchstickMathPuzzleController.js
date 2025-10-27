@@ -19,9 +19,6 @@ class MatchstickMathPuzzleController {
 
     
     return new Promise(async (resolve, reject) => {
-
-      
-
       try {
     
             const MatchstickMathPuzzle = MatchstickMathPuzzleModel(data);
@@ -33,21 +30,17 @@ class MatchstickMathPuzzleController {
             resolve({
               msg: `MatchstickMathPuzzle added`,
               status: 1,
-            });
-          
-
-
-        
+            });        
       } catch (error) {
+
           console.log(error);
           
-        
         reject({ msg: "internel error", status: 0 });
       }
     });
   }
 
-  read(id,user_id) {
+  read(id) {
 
     
 
@@ -64,6 +57,9 @@ const MatchstickMathPuzzle = await MatchstickMathPuzzleModel.findById(id)
 
   resolve({ msg: "MatchstickMathPuzzle finded", status: 1 ,MatchstickMathPuzzle});
         }
+
+
+  
       
 else{
 
@@ -81,7 +77,7 @@ else{
   }
 
 
-  edit(id,data) {
+  edit(data,id) {
 
     
 
@@ -90,7 +86,6 @@ else{
        
            await MatchstickMathPuzzleModel.updateOne({
           _id: id,
-      
         },data);
 
   resolve({ msg: "update Succesfully", status: 1 });

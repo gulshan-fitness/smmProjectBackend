@@ -96,10 +96,10 @@ res.send(succes)
 
 RiddlesRouter.put(
 
-    "/edit/:id/:User_id",
+    "/edit/:id",
 
     (req,res)=>{
-        const result= new RiddlesController().edit(req.body,req.params.id,req.params.User_id)
+        const result= new RiddlesController().edit(req.body,req.params.id)
 
 result.then(
     (succes)=>{

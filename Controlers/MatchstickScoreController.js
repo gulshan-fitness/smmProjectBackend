@@ -18,14 +18,14 @@ class MatchistickScoreController {
 
       try {
      
-        const exist_user= await MatchistickScoreModel.findOne({user_id:data?.user_id})
+        const exist_userscore= await MatchistickScoreModel.findOne({user_id:data?.user_id,MatchstickMathPuzzle_id:data?.MatchstickMathPuzzle_id})
 
 
 
-        if(exist_user){
+        if(exist_userscore){
 
 
-             await MatchistickScoreModel.updateOne({user_id:data?.user_id},data)
+             await MatchistickScoreModel.updateOne({_id:exist_userscore?._id}, {$set:{score:data?.score} })
              
 
             resolve({

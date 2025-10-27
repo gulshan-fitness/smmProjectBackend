@@ -180,7 +180,7 @@ try {
 }
  }
 
-  edit(id,data) {
+  edit(data,id) {
 
     return new Promise(async (resolve, reject) => {
       try {

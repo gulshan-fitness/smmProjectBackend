@@ -91,7 +91,55 @@ class user_controller {
         }
 
 
+ async read(id){
+      
+        
+   
+
+      
+            try {
+                
+                if(id){
+              const user = await user_model.findOne({_id:id})
+
+  return { msg: "User Finded", status: 1 ,user}
+
+                }
+        
+      
+        
+                  
+
+        
+                    else{
+
+
+             const user = await  user_model.find()
+
+  return { msg: "User Finded ", status: 1 ,user}
+
+                
+                    }
+        
+        
+               
+                
   
+                
+            } 
+            catch (error) {
+                
+                
+               
+                reject(
+                    
+                    { msg: "internal error", status: 0 }
+                   )
+            }}
+        
+     
+
+
         login(data){
     
    
@@ -325,6 +373,144 @@ const{password,...userdata}=existuser.toObject()
                 
             })
         
+            }
+
+
+             delete(id){
+    
+   
+            return new Promise(
+                async(resolve, reject) => {
+                try {
+        
+        
+        
+        
+             await user_model.deleteOne({_id:id})
+           
+ resolve(
+                        
+                        { msg: "delete succesfully", status: 1 }
+                       )
+            
+                    }
+        
+    
+        
+             
+                 
+                    
+                
+                catch (error) {
+
+                      
+                    
+                    
+                   
+                    reject(
+                        
+                        { msg: "internal error", status: 0 }
+                       )
+                }
+            
+                
+            })
+        
+            }
+
+
+      async top10User(){
+
+                try {
+                                    const topStudents = await user_model.aggregate([
+  // Step 1: Initialize with users
+  { $match: {} }, // Include all users (no filter needed unless specific conditions apply)
+
+  // Step 2: Lookup scores from each collection
+  {
+    $lookup: {
+      from: 'riddlescores',
+      localField: '_id',
+      foreignField: 'user_id',
+      as: 'riddleScores',
+    },
+  },
+  {
+    $lookup: {
+      from: 'sudokuscores',
+      localField: '_id',
+      foreignField: 'user_id',
+      as: 'sudokuScores',
+    },
+  },
+  {
+    $lookup: {
+      from: 'matchstickmathpuzzlescores',
+      localField: '_id',
+      foreignField: 'user_id',
+      as: 'matchstickScores',
+    },
+  },
+  {
+    $lookup: {
+      from: 'crosswordpuzzlescores',
+      localField: '_id',
+      foreignField: 'user_id',
+      as: 'crosswordScores',
+    },
+  },
+
+  // Step 3: Calculate the maximum score across all games for each user
+  {
+    $project: {
+      name: 1,
+      email: 1,
+      maxScore: {
+        $max: [
+          { $max: '$riddleScores.score' }, // Max score from riddles
+          { $max: '$sudokuScores.score' }, // Max score from sudoku
+          { $max: '$matchstickScores.score' }, // Max score from matchstick puzzles
+          { $max: '$crosswordScores.currentScore' }, // Max score from crossword puzzles
+        ],
+      },
+    },
+  },
+
+  // Step 4: Filter out users with no scores (optional, if you only want users with scores)
+  {
+    $match: {
+      maxScore: { $gt: 0 }, // Only include users with a max score greater than 0
+    },
+  },
+
+  // Step 5: Sort by maxScore in descending order
+  {
+    $sort: { maxScore: -1 },
+  },
+
+  // Step 6: Limit to top 10
+  {
+    $limit: 10,
+  },
+
+  // Step 7: Project the desired fields
+  {
+    $project: {
+      _id: 1,
+      name: 1,
+      email: 1,
+      maxScore: 1,
+    },
+  },
+]);
+
+
+return{msg:"top 10 students Finded",topStudents,status:1}
+                    
+                } catch (error) {
+                    return{msg:error,status:0}
+                }
+
             }
 
 

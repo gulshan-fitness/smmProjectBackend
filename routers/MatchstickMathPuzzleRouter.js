@@ -93,6 +93,34 @@ res.send(succes)
 )
 
 
+MatchstickMathPuzzleRouter.put(
+    "/edit/:id?",
+    authenticateToken,
+    (req,res)=>{
+
+ const result= new MatchstickMathPuzzleController().edit(req.body,req.params.id)
+
+result.then(
+
+    (succes)=>{
+
+res.send(succes)
+    }
+)
+
+
+
+
+.catch(
+    (error)=>{
+        res.send(error)
+
+    }
+)
+
+    }
+)
+
 
 MatchstickMathPuzzleRouter.delete(
 

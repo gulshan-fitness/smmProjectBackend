@@ -67,6 +67,32 @@ User_router.post(
 )
 
 
+User_router.get(
+    "/read:id?",
+(req,res)=>{
+    
+    
+
+        const result = new user_controller().read(req.params.id)
+
+        result.then(
+            (succes)=>{
+                res.send( succes)
+            }
+        )
+        
+        .catch(
+            (error)=>{
+                res.send( error) 
+            }
+        )
+
+
+
+    }
+
+)
+
 
 User_router.post(
     "/loginWithOtp",
@@ -122,6 +148,62 @@ User_router.get(
 
     }
 
+)
+
+User_router.delete(
+    "/delete/:id",
+    authenticateToken,
+
+(req,res)=>{
+    
+    
+
+        const result = new user_controller().delete(req.params.id)
+
+        result.then(
+            (succes)=>{
+                res.send( succes)
+            }
+        )
+        
+        .catch(
+            (error)=>{
+                res.send( error) 
+            }
+        )
+
+
+
+    }
+
+)
+
+User_router.get(
+        "/top10User",
+    
+
+(req,res)=>{
+    
+    
+
+        const result = new user_controller().top10User()
+
+        result.then(
+            (succes)=>{
+                res.send( succes)
+            }
+        )
+        
+        .catch(
+            (error)=>{
+                res.send( error) 
+            }
+        )
+
+
+
+    }
+    
 )
 
 
