@@ -422,11 +422,10 @@ const{password,...userdata}=existuser.toObject()
       async top10User(){
 
                 try {
-                                    const topStudents = await user_model.aggregate([
-  // Step 1: Initialize with users
-  { $match: {} }, // Include all users (no filter needed unless specific conditions apply)
+const topStudents = await user_model.aggregate([
+  { $match: {} },
 
-  // Step 2: Lookup scores from each collection
+  // Lookup all score collections
   {
     $lookup: {
       from: 'riddlescores',
@@ -460,48 +459,49 @@ const{password,...userdata}=existuser.toObject()
     },
   },
 
-  // Step 3: Calculate the maximum score across all games for each user
+  // Calculate total score = sum of all scores
   {
     $project: {
       name: 1,
       email: 1,
-      maxScore: {
-        $max: [
-          { $max: '$riddleScores.score' }, // Max score from riddles
-          { $max: '$sudokuScores.score' }, // Max score from sudoku
-          { $max: '$matchstickScores.score' }, // Max score from matchstick puzzles
-          { $max: '$crosswordScores.currentScore' }, // Max score from crossword puzzles
-        ],
-      },
-    },
+      totalScore: {
+        $sum: [
+          { $sum: '$riddleScores.score' },
+          { $sum: '$sudokuScores.score' },
+          { $sum: '$matchstickScores.score' },
+          { $sum: '$crosswordScores.currentScore' },
+        ]
+      }
+    }
   },
 
-  // Step 4: Filter out users with no scores (optional, if you only want users with scores)
+  // Only users who played at least one game
+  { $match: { totalScore: { $gt: 0 } } },
+
+  // Sort by totalScore descending
+  { $sort: { totalScore: -1 } },
+
+  // Add rank
   {
-    $match: {
-      maxScore: { $gt: 0 }, // Only include users with a max score greater than 0
-    },
+    $setWindowFields: {
+      sortBy: { totalScore: -1 },
+      output: { rank: { $rank: {} } }
+    }
   },
 
-  // Step 5: Sort by maxScore in descending order
-  {
-    $sort: { maxScore: -1 },
-  },
+  // Top 10
+  { $limit: 10 },
 
-  // Step 6: Limit to top 10
-  {
-    $limit: 10,
-  },
-
-  // Step 7: Project the desired fields
+  // Final output
   {
     $project: {
       _id: 1,
       name: 1,
       email: 1,
-      maxScore: 1,
-    },
-  },
+      totalScore: 1,
+      rank: 1
+    }
+  }
 ]);
 
 

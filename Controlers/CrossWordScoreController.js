@@ -22,11 +22,13 @@ class CrosswordPuzzleScoreController {
 
       try {
      
-        const exist_user= await CrosswordPuzzleScoreModel.findOne({user_id:data?.user_id})
+        const existScore= await CrosswordPuzzleScoreModel.findOne({user_id:data?.user_id,crosswordPuzzle_id:data?.crosswordPuzzle_id})
 
-        if(exist_user){
+        if(existScore){
 
-             await  CrosswordPuzzleScoreModel.updateOne({user_id:data?.user_id},data)
+             await  CrosswordPuzzleScoreModel.updateOne({_id:existScore?._id},{
+              $set:{currentScore:data?.currentScore}
+             })
              
             resolve({
               msg: `Score Submited`,
@@ -36,11 +38,11 @@ class CrosswordPuzzleScoreController {
         }
      
         else{
-             const CrosswordpuzzleScore = CrosswordPuzzleScoreModel(data);
+
+            const CrosswordpuzzleScore = CrosswordPuzzleScoreModel(data);
 
             await CrosswordpuzzleScore.save();
 
-      
 
             resolve({
               msg: `Score Submited`,

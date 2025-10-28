@@ -22,11 +22,13 @@ class SudokoScoreController {
 
       try {
      
-        const exist_user= await SudokoScoreModel.findOne({user_id:data?.user_id})
+        const existScore= await SudokoScoreModel.findOne({user_id:data?.user_id,Sudoko_id:data?.Sudoko_id})
 
-        if(exist_user){
+        if(existScore){
 
-             await  SudokoScoreModel.updateOne({user_id:data?.user_id},data)
+             await  SudokoScoreModel.updateOne({_id:existScore?._id},{$set:{
+              score:data?.score
+             }})
              
             resolve({
               msg: `Score Submited`,

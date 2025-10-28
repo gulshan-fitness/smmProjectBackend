@@ -17,16 +17,20 @@ class RiddleScoreController {
       
 
       try {
+
      
-        const exist_user= await RiddleScoreModel.findOne({user_id:data?.user_id})
+        const existScore= await RiddleScoreModel.findOne(
+          {user_id:data?.user_id,
+          Riddle_id:data?.Riddle_id}
+        )
 
 
 
-        if(exist_user){
+        if(existScore){
 
-
-             await RiddleScoreModel.updateOne({user_id:data?.user_id},data)
-             
+             await RiddleScoreModel.updateOne({_id:existScore?._id},{$set:{
+              score:data?.score
+             }})
 
             resolve({
               msg: `Score Submited`,
@@ -41,9 +45,6 @@ class RiddleScoreController {
              const riddleScore = RiddleScoreModel(data);
 
             await riddleScore.save();
-
-      
-
             resolve({
               msg: `Score Submited`,
               status: 1,
