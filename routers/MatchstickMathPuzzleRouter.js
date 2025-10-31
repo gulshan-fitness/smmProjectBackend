@@ -66,6 +66,33 @@ res.send(succes)
     }
 )
 
+MatchstickMathPuzzleRouter.get(
+
+    "/totalcount",
+
+    (req,res)=>{
+
+
+        const result= new MatchstickMathPuzzleController().totalcount()
+
+result.then(
+    (succes)=>{
+
+res.send(succes)
+    }
+)
+.catch(
+    (error)=>{
+        res.send(error)
+
+    }
+)
+
+    }
+)
+
+
+
 
 MatchstickMathPuzzleRouter.post(
 

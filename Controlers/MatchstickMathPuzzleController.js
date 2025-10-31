@@ -25,12 +25,13 @@ class MatchstickMathPuzzleController {
 
             await MatchstickMathPuzzle.save();
 
-      
 
             resolve({
               msg: `MatchstickMathPuzzle added`,
               status: 1,
-            });        
+            });  
+            
+            
       } catch (error) {
 
           console.log(error);
@@ -67,6 +68,34 @@ else{
 
   resolve({ msg: "MatchstickMathPuzzle finded", status: 1 ,MatchstickMathPuzzle});
 }
+
+      } catch (error) {
+          
+        
+        reject({ msg: "internel error", status: 0 });
+      }
+    });
+  }
+
+   totalcount() {
+
+    
+
+    return new Promise(async (resolve, reject) => {
+      try {
+
+  
+
+const TotalCounts = await MatchstickMathPuzzleModel.countDocuments()
+
+
+resolve({ msg: "TotalCounts", status: 1 ,TotalCounts});
+        
+
+
+  
+      
+
 
       } catch (error) {
           
