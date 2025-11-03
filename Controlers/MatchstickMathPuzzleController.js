@@ -127,65 +127,94 @@ resolve({ msg: "TotalCounts", status: 1 ,TotalCounts});
   }
 
 
-  resultVerify(id,data){
+ resultVerify(id, data) {
     console.log(data);
-    
 
     return new Promise(async (resolve, reject) => {
-      try {
-       
-           await MatchstickMathPuzzleModel.updateOne({
-          _id: id,
-      
-        },{ $set:{submitedAnswer:data?.submitedAnswer }});
-        
-          // Fetch the updated puzzle
-    const puzzle = await MatchstickMathPuzzleModel.findById(id);
-if (!puzzle) {
-    reject({ msg: "Puzzle not found", status: 0 })
-}
+        try {
+            // Update the submitted answer
+            await MatchstickMathPuzzleModel.updateOne({
+                _id: id,
+            }, { $set: { submitedAnswer: data?.submitedAnswer } });
 
+            // Fetch the updated puzzle
+            const puzzle = await MatchstickMathPuzzleModel.findById(id);
+            if (!puzzle) {
+                reject({ msg: "Puzzle not found", status: 0 });
+                return;
+            }
 
+            const areAnswersEqual = (result, submittedAnswer) => {
+                if (!result || !submittedAnswer) return false;
+                if (result.length !== submittedAnswer.length) return false;
 
-const areAnswersEqual = (result, submittedAnswer) => {
-        if (result.length !== submittedAnswer.length) return false;
+                for (let i = 0; i < result.length; i++) {
+                    const rItem = result[i];
+                    const sItem = submittedAnswer[i];
 
-        for (let i = 0; i < result.length; i++) {
-          const rItem = result[i];
-          const sItem = submittedAnswer[i];
+                    // Compare basic properties
+                    if (rItem.id !== sItem.id || rItem.value !== sItem.value) {
+                        return false;
+                    }
 
-          if (rItem.id !== sItem.id || rItem.value !== sItem.value) return false;
+                    // Handle matchsticks comparison - they are nested arrays according to your schema
+                    if (!rItem.matchsticks || !sItem.matchsticks) {
+                        if (rItem.matchsticks !== sItem.matchsticks) return false;
+                        continue;
+                    }
 
-          if (rItem.matchsticks.length !== sItem.matchsticks.length) return false;
+                    if (rItem.matchsticks.length !== sItem.matchsticks.length) {
+                        return false;
+                    }
 
-          for (let j = 0; j < rItem.matchsticks.length; j++) {
-            const rMatch = rItem.matchsticks[j];
-            const sMatch = sItem.matchsticks[j];
-            if (rMatch.id !== sMatch.id || rMatch.status !== sMatch.status) return false;
-          }
+                    // Compare each matchstick group (nested array)
+                    for (let j = 0; j < rItem.matchsticks.length; j++) {
+                        const rMatchGroup = rItem.matchsticks[j];
+                        const sMatchGroup = sItem.matchsticks[j];
+
+                        if (!rMatchGroup || !sMatchGroup) {
+                            if (rMatchGroup !== sMatchGroup) return false;
+                            continue;
+                        }
+
+                        if (rMatchGroup.length !== sMatchGroup.length) {
+                            return false;
+                        }
+
+                        // Compare individual matchsticks within the group
+                        for (let k = 0; k < rMatchGroup.length; k++) {
+                            const rMatch = rMatchGroup[k];
+                            const sMatch = sMatchGroup[k];
+
+                            if (!rMatch || !sMatch) {
+                                if (rMatch !== sMatch) return false;
+                                continue;
+                            }
+
+                            if (rMatch.id !== sMatch.id || rMatch.status !== sMatch.status) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
+            };
+
+            // Compare submitted answer with result
+            const matched = areAnswersEqual(puzzle.result, puzzle.submitedAnswer);
+
+            if (matched) {
+                resolve({ msg: "Answer Is right", status: 1 });
+            } else {
+                resolve({ msg: "Answer Is wrong", status: 0 });
+            }
+
+        } catch (error) {
+            console.log(error);
+            reject({ msg: "Internal error", status: 0 });
         }
-        return true;
-      };
-
-      // Compare submitted answer with result
-      const matched = areAnswersEqual(puzzle?.result, puzzle?.submitedAnswer);
-
-
-     
-
-        if(matched) resolve({ msg: "Answer Is right", status: 1 });
-
-        else  resolve({ msg: "Answer Is wrong", status:0});
-
-        
-      } catch (error) {
-        console.log(error);
-        
-        reject({ msg: "internel error", status: 0 });
-      }
     });
-  }
-
+}
 
    delete(id) {
 

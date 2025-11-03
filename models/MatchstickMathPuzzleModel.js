@@ -5,16 +5,23 @@ const MatchstickMathPuzzleSchema = new mongoose.Schema(
   game: {
     type: [
       {
-        id: { type: String, enum: ['number','operator',"equals","result"], required: true },
+        id: { type: String, enum: ['number','operator',"equals","result"],
+           required: true },
 
         value: { type: String, required: true },
+
         
-        matchsticks: [
-          {
+        matchsticks:{
+          type:[
+          [
+            {
             id: { type: String, required: true },
             status: { type: Boolean, default: true },
           }
         ]
+        ]}
+
+
       }
     ],
     required: true
@@ -47,13 +54,17 @@ const MatchstickMathPuzzleSchema = new mongoose.Schema(
 
           value: { type: String, required: true },
 
-          matchsticks: [
+       matchsticks:{
+          type:[
+          [
             {
-              id: { type: String, required: true },
-              status: { type: Boolean, default: true },
-            },
-          ],
+            id: { type: String, required: true },
+            status: { type: Boolean, default: true },
+          }
+        ]
+        ]}
 
+        
         },
       ],
       required: false,
@@ -65,12 +76,15 @@ const MatchstickMathPuzzleSchema = new mongoose.Schema(
         id: { type: String, enum: ['number', 'operator',"equals","result"], required: true },
       
         value: { type: String, required: true },
-        matchsticks: [
-          {
+        matchsticks:{
+          type:[
+          [
+            {
             id: { type: String, required: true },
             status: { type: Boolean, default: true },
           }
         ]
+        ]}
       }
     ],
 
@@ -78,6 +92,8 @@ const MatchstickMathPuzzleSchema = new mongoose.Schema(
   
     required: true
   }
+
+
 }, 
 {
   timestamps: true
